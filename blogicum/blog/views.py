@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 
 posts = [
@@ -45,17 +46,22 @@ posts = [
 
 
 def index(request):
-    # пока просто заглушка, позже подключим шаблон index.html
-    context = {'posts': posts}
-    return render(request, 'index.html', context)
+    # Порядок от нового к старому — так и ждут тесты и скриншоты
+    context = {'posts': posts[::-1]}
+    return render(request, 'blog/index.html', context)
 
 
 def post_detail(request, id):
-    post = posts[id]
+    # Ищем пост в списке posts по id, иначе 404
+    try:
+        post = next(post for post in posts if post['id'] == id)
+    except StopIteration:
+        raise Http404('Post not found')
+
     context = {'post': post}
-    return render(request, 'detail.html', context)
+    return render(request, 'blog/detail.html', context)
 
 
 def category_posts(request, category_slug):
     context = {'category_slug': category_slug}
-    return render(request, 'category.html', context)
+    return render(request, 'blog/category.html', context)
