@@ -1,7 +1,6 @@
 from django.http import Http404
 from django.shortcuts import render
 
-
 posts = [
     {
         'id': 0,
@@ -63,7 +62,6 @@ def post_detail(request, post_id):
 
     context = {'post': post}
     return render(request, 'blog/detail.html', context)
-
 
 
 def category_posts(request, category_slug):
