@@ -52,16 +52,12 @@ def index(request):
 
 
 def post_detail(request, post_id):
-    try:
-        post = next(
-            post for post in posts
-            if post['id'] == post_id
-        )
-    except StopIteration:
-        raise Http404('Post not found')
-
-    context = {'post': post}
-    return render(request, 'blog/detail.html', context)
+    for post in posts:
+        if post['id'] == post_id:
+            context = {'post': post}
+            return render(request, 'blog/detail.html', context)
+    # Если ничего не нашли в цикле — выбрасываем 404
+    raise Http404('Post not found')
 
 
 def category_posts(request, category_slug):
