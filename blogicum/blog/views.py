@@ -45,7 +45,7 @@ posts = [
 ]
 
 # Словарь для быстрого доступа по id, считается один раз при импорте
-POSTS_BY_ID = {post['id']: post for post in posts}
+posts_dict = {post['id']: post for post in posts}
 
 
 def index(request):
@@ -55,24 +55,14 @@ def index(request):
 
 
 def post_detail(request, post_id):
-    try:
-        post = POSTS_BY_ID[post_id]
-    except KeyError:
+    if post_id not in posts_dict:
         raise Http404('Post not found')
 
+    post = posts_dict[post_id]
     context = {'post': post}
     return render(request, 'blog/detail.html', context)
 
 
 def category_posts(request, category_slug):
-    # Фильтр постов по категории + от нового к старому
-    filtered_posts = [
-        post for post in posts
-        if post['category'] == category_slug
-    ][::-1]
-
-    context = {
-        'category_slug': category_slug,
-        'posts': filtered_posts,
-    }
+    context = {'category_slug': category_slug}
     return render(request, 'blog/category.html', context)
