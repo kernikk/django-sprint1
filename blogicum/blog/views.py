@@ -44,12 +44,11 @@ posts = [
     },
 ]
 
-# Словарь для быстрого доступа по id, считается один раз при импорте
+
 posts_dict = {post['id']: post for post in posts}
 
 
 def index(request):
-    # Порядок от нового к старому — так и ждут тесты и скриншоты
     context = {'posts': posts[::-1]}
     return render(request, 'blog/index.html', context)
 
